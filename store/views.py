@@ -77,7 +77,7 @@ def checkout(request, product_name):
         user = request.user
         order = Order(user=request.user, product_name=product_name)
         order.save()
-        return redirect('success')
+        return redirect('success', product_name=product_name)
     context = {'product': product}
     return render(request, 'store/checkout.html', context=context)
 
