@@ -2,10 +2,46 @@
 
 {% block content %}
     <h1>Hi {{user.username}}!</h1>
-    Details:
-    <h1>{{user.email}}</h1>
-
-    {% for order in orders  %}
-        <li>{{order.product_name}}</l1>
-    {% endfor %}
+    {% if user.is_superuser %}
+        <a href='/admin'>Click Here to go to the Admin Portal</a><br>
+    {% endif %}
+    <h3>Details:</h3>
+    <table class="table table-dark table-hover">
+        <tbody>
+            <tr>
+                <td>Username</td>
+                <td>{{user.username}}</td>
+            </tr>
+            <tr>
+                <td>Email Address</td>
+                <td>{{user.email}}</td>
+            </tr>
+            <tr>
+              <td>Reset Password?</td>
+              <td><a href="{% url 'reset_password' %}">Click Here to reset your password</a>
+            </tr>
+        </tbody>
+      </table>
+      <br><br>
+      <h3>Orders:</h3>
+    <table class="table table-light table-hover">
+        <thead class='table table-dark'>
+            <th scope="row">Vehicle</th>
+            <td colspan="2" class="table-active">Date Ordered</td>
+            <td>Delivered?</td>
+          </thead>
+        <tbody>
+              {% for order in orders %}
+                <tr>
+                    <th scope="row">{{order.product_name}}</th>
+                    <td colspan="2" class="table-active">{{order.date_ordered}}</td>
+                    {% if order.complete %}
+                        <td>Yes</td>
+                    {% else %}
+                    <td>No</span></td>
+                    {% endif %}
+                </tr>
+              {% endfor %}
+        </tbody>
+    </table>
 {% endblock  %}

@@ -7,6 +7,7 @@ from django.contrib import messages
 from .forms import CreateUserForm
 from django.core.mail import EmailMessage
 from django.conf import settings
+from django.template.loader import render_to_string
 
 # Create your views here.
 
@@ -77,6 +78,15 @@ def checkout(request, product_name):
         user = request.user
         order = Order(user=request.user, product_name=product_name)
         order.save()
+        template = render_to_string('store/purchase_email.html', {'user': request.user, 'product_name': product_name})
+        email = EmailMessage(
+            f'Purchase of {product_name}',
+            template,
+            settings.EMAIL_HOST_USER,
+            [request.user.email],
+        )
+        email.fail_silently = False
+        email.send()
         return redirect('success', product_name=product_name)
     context = {'product': product}
     return render(request, 'store/checkout.html', context=context)
