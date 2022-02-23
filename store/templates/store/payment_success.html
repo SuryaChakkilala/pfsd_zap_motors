@@ -1,6 +1,14 @@
 {% extends 'store/main.html' %}
 
 {% block content %}
-    <h1>Payment Successful</h1>
-    <a href="{% url 'store' %}" class='btn btn-primary'>Go to Home</a>
+    <div class="card" style="width: 70rem;">
+        <img src="{{product.imageURL}}" class="card-img-top" >
+        <div class="card-body">
+          <h3 class="card-title">Payment Successful!</h3>
+          <p class="card-text">Congrats {{customer}}!.</p>
+          <p class="card-text">{{product.name}} will be delivered to you within the next 20 business days. Contact nearest Zap Showroom for more info.</p>
+          <p class="card-text">You can reach out to us on: zapmotors01@gmail.com</p>
+          <a href="{% url 'store' %}" class='btn btn-primary'>Go to Home</a>
+        </div>
+      </div>
 {% endblock %}

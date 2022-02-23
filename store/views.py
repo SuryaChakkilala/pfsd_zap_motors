@@ -5,11 +5,15 @@ from django.contrib.auth import authenticate, login, logout
 from django.forms import inlineformset_factory
 from django.contrib import messages
 from .forms import CreateUserForm
+from django.core.mail import EmailMessage
+from django.conf import settings
 
 # Create your views here.
 
 
 def registerPage(request):
+    if request.user.is_authenticated:
+        return redirect('store')
     form = CreateUserForm()
 
     if request.method == 'POST':
@@ -17,6 +21,14 @@ def registerPage(request):
         if form.is_valid():
             form.save()
             messages.success(request, f'Account was created for {form.cleaned_data.get("username")}')
+            email = EmailMessage(
+                'Welcome to Zap Motors!',
+                'Thank you for registering your account on Zap Motors',
+                settings.EMAIL_HOST_USER,
+                [form.cleaned_data['email']],
+            )
+            email.fail_silently = False
+            email.send()
             return redirect('login')
             
     context = {'form': form}
@@ -69,8 +81,12 @@ def checkout(request, product_name):
     context = {'product': product}
     return render(request, 'store/checkout.html', context=context)
 
-def success(request):
-    return render(request, 'store/payment_success.html')
+def success(request, product_name):
+    if not request.user.is_authenticated:
+        return redirect('login')
+    product = Product.objects.get(name=product_name)
+    context = {'product': product, 'customer': request.user.username}
+    return render(request, 'store/payment_success.html', context)
 
 def profile(request):
     if not request.user.is_authenticated:
