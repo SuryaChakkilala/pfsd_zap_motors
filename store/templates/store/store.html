@@ -1,0 +1,21 @@
+{% extends 'store/main.html' %}
+{% load static %}
+{% block content %}
+	{% if user.is_authenticated %}
+		Hi {{user.username|capfirst}}!
+	{% endif %}
+	<div class="row">
+		{% for product in products %}
+			<div class="col-lg-4">
+				<img class="thumbnail" src="{{product.imageURL}}">
+				<div class="box-element product">
+					<h6><strong>{{product.name}}</strong></h6>
+					<hr>
+					<a class="mx-5 btn btn-outline-success" href="{% url 'car_view' car_name=product.name %}">View</a>
+					<h4 style="display: inline-block; float: left;"><strong>${{product.price|floatformat:2}}</strong></h4>
+				</div>
+			</div>
+		{% endfor %}
+	</div>
+
+{% endblock content %}

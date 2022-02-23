@@ -1,0 +1,27 @@
+{% extends 'store/main.html' %}
+
+{% block content %}
+<a href="/" class="btn btn-primary my-1"><span class="px-2">&#x2190;</span >Go Back</a>
+  <div class="row">
+    <div class="col-lg-4">
+      <div class="card">
+        <div class="card-body">
+            <img src="{{product.imageURL}}" class='thumbnail'>
+        </div>
+      </div>
+    </div>
+    <div class="my-2 col-lg-8">
+      <div class="card">
+        <div class="card-body">
+          <center>
+            <h2 class="card-title">{{product.name}}</h2>
+            <hr>
+          </center>
+          <h3>Price: ${{product.price|floatformat:2}}</h3>
+          <p class="card-text">{{product.description}}</p>
+        </div>
+        <a href="{% url 'checkout' product_name=product.name %}" class="mx-3 my-3 btn btn-success">Buy Now</a>
+      </div>
+    </div>
+  </div>
+{% endblock  %}
